@@ -7,7 +7,7 @@ type broadcast struct {
 }
 
 // 播音器
-type broadcaster struct {
+type Broadcaster struct {
     L chan chan (chan broadcast)
     S chan <- interface{}
 }
@@ -17,7 +17,7 @@ type Receiver struct {
     C chan broadcast
 }
 
-func NewBroadcaster() *broadcaster {
+func NewBroadcaster() *Broadcaster {
     s := make(chan interface{})
     l := make(chan (chan (chan broadcast)))
     go func() {
@@ -37,16 +37,16 @@ func NewBroadcaster() *broadcaster {
             }
         }
     }()
-    return &broadcaster{L: l, S: s}
+    return &Broadcaster{L: l, S: s}
 }
 
-func (b *broadcaster) Listen() Receiver {
+func (b *Broadcaster) Listen() Receiver {
     c := make(chan chan broadcast, 0);
     b.L <- c;
     return Receiver{<-c};
 }
 
-func (b *broadcaster) Writer(v interface{}) {
+func (b *Broadcaster) Writer(v interface{}) {
     b.S <- v
 }
 
